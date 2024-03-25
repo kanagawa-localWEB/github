@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>納　品　書</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <style>
+    .search-area input[type="text"] {
+      padding: 5px 5px 3px;
+      font-size: 16px;
+      border: 1px solid #D6D6D6;
+    }
+
+    .search-area input[type="text"]:focus {
+      background: #F9F9F9;
+    }
+
+    .search-result {
+      margin-top: 20px;
+    }
+
+    .search-result__hit-num span {
+      font-weight: bold;
+    }
+
+    #search-result__list {
+      margin-top: 15px;
+    }
+
+    #search-result__list span {
+      display: inline-block;
+      margin-right: 15px;
+      padding: 5px;
+      background: #F2F2F2;
+    }
+
+    .target-area {
+      margin-top: 50px;
+    }
+
+    img{
+         position: absolute;
+         height: 90px;
+         width: 400px;
+         right: 30px;
+         top:20px;
+  </style>
+</head>
+<body>
+	<h1>　納　　品　　書　</h1>
+　　<p>毎度お引立てあずかり有難うございます。</p>
+   <P>お買上商品について下記のとおり申し上げます。</P>
+   <P>ご査収の程よろしくお願い致します。</P>	
+   <img src="logo-main (1).jpg" alt="">
+   <div class="wrapper">
+    <div class="search-area">
+      <form>
+        <input type="text" id="search-text" placeholder="東邦コードを入力">
+      </form>
+      <div class="search-result">
+        <div class="search-result__hit-num"></div>
+        <div id="search-result__list"></div>
+      </div>
+
+    </div>
+  </div><!-- /.wrapper -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+  <script src="list_items.js"></script>
+  <script>
+    const items = [
+"　　東邦ｺｰﾄﾞ　　006705344　　ＪＡＮコード　　4987243358807　　メーカー名　　わかもと　　　商品名　　チェックメイト　ヘルペス　アイ　　　　　　３テスト",
+"　　東邦ｺｰﾄﾞ　　006705356　　ＪＡＮコード　　4987243358708　　メーカー名　　わかもと　　　商品名　　キャピリア　アデノ　アイ　Ｎｅｏ　　　　　５テスト",
+"　　東邦ｺｰﾄﾞ　　006800063　　ＪＡＮコード　　4987350018571　　メーカー名　　テルモ　　　　商品名　　ＡＣＤ－Ａ液　　　　５００ｍＬ　　　　　　２０ＴＰ",
+"　　東邦ｺｰﾄﾞ　　011200178　　ＪＡＮコード　　4987631610319　　メーカー名　　乾商事　　　　商品名　　ハイアライＣＡ　　　　　　　　　　　　　　　　４㎏",
+"　　東邦ｺｰﾄﾞ　　026901047　　ＪＡＮコード　　4987559828551　　メーカー名　　シーメンス　　商品名　　ウリスティックス　　　　　　　　　　　　　１００枚",
+"　　東邦ｺｰﾄﾞ　　026901098　　ＪＡＮコード　　4987559828131　　メーカー名　　シーメンス　　商品名　　ウロラブスティックス　　　　　　　　　　　１００枚",
+"　　東邦ｺｰﾄﾞ　　026901217　　ＪＡＮコード　　4987559828278　　メーカー名　　シーメンス　　商品名　　ヘマスティックス　　　　　　　　　　　　　１００枚",
+"　　東邦ｺｰﾄﾞ　　030114554　　ＪＡＮコード　　4987562793709　　メーカー名　　シスメック　　商品名　　７９３７　干渉チェック・Ａプラス　　　　２ｍＬ分８",
+"　　東邦ｺｰﾄﾞ　　030132165　　ＪＡＮコード　　4987562200467　　メーカー名　　シスメック　　商品名　　セルクリーン　　　　ＣＬ－５０　　　　　　５０ｍＬ",
+"　　東邦ｺｰﾄﾞ　　030136969　　ＪＡＮコード　　4987562402564　　メーカー名　　シスメック　　商品名　　４０２５６　ＰＯＣＨ－ＰＡＣＫ　Ｌ　２５０ｍＬＸ２",
+"　　東邦ｺｰﾄﾞ　　030136972　　ＪＡＮコード　　4987562402557　　メーカー名　　シスメック　　商品名　　４０２５５　ＰＯＣＨ－ＰＡＣＫ　Ｄ　　　　２ＬＸ２",
+"　　東邦ｺｰﾄﾞ　　030144509　　ＪＡＮコード　　4987562433964　　メーカー名　　シスメック　　商品名　　ＵＦ－フルオロセルＣＲ　　　　　　　　２９ｍＬＸ２",
+"　　東邦ｺｰﾄﾞ　　030144512　　ＪＡＮコード　　4987562433957　　メーカー名　　シスメック　　商品名　　ＵＦ－フルオロセルＳＦ　　　　　　　　２９ｍＬＸ２",
+"　　東邦ｺｰﾄﾞ　　030144524　　ＪＡＮコード　　4987562433940　　メーカー名　　シスメック　　商品名　　ＵＦ－セルパックＣＲ　　　　　　　　　２．１ＬＸ２",
+"　　東邦ｺｰﾄﾞ　　030144536　　ＪＡＮコード　　4987562433933　　メーカー名　　シスメック　　商品名　　ＵＦ－セルパックＳＦ　　　　　　　　　２．１ＬＸ２",
+"　　東邦ｺｰﾄﾞ　　030144551　　ＪＡＮコード　　4987562433681　　メーカー名　　シスメック　　商品名　　ＵＦ－コントロール　　　Ｌ：３０ｍＬ、Ｈ：３０ｍＬ",
+"　　東邦ｺｰﾄﾞ　　030122678　　ＪＡＮコード　　4987562791811　　メーカー名　　シスメック　　商品名　　７９１８１干渉チェックＲＦ　　　　　　１ｍＬ分Ｘ６",
+"　　東邦ｺｰﾄﾞ　　031211946　　ＪＡＮコード　　4987274787119　　メーカー名　　アルフレッ　　商品名　　チェックＰＲＯＭ　　　　　　　　　　　　１０テスト",
+"　　東邦ｺｰﾄﾞ　　031420641　　ＪＡＮコード　　4987302045259　　メーカー名　　島津ダイア　　商品名　　セントラップＭＢ　Ａ試薬　　　　　　　　　１キット",
+"　　東邦ｺｰﾄﾞ　　031403382　　ＪＡＮコード　　4987302056101　　メーカー名　　島津ダイア　　商品名　　チオグリコール酸培地Ⅱ　　　　　　　　　　３００ｇ",
+"　　東邦ｺｰﾄﾞ　　031420653　　ＪＡＮコード　　4987302045266　　メーカー名　　島津ダイア　　商品名　　セントラップＭＢ　Ｂ試薬　　　　　　　　　１キット",
+"　　東邦ｺｰﾄﾞ　　031420665　　ＪＡＮコード　　4987302045273　　メーカー名　　島津ダイア　　商品名　　セントラップＭＢ　Ｃ試薬　　　　　　　　　１キット",
+"　　東邦ｺｰﾄﾞ　　031424099　　ＪＡＮコード　　4987302500284　　メーカー名　　島津ダイア　　商品名　　アキュレート　ＡＢＨＫ寒天培地　　　　　　１００枚",
+"　　東邦ｺｰﾄﾞ　　031511279　　ＪＡＮコード　　4987026021942　　メーカー名　　栄研化学　　　商品名　　ポア－スキロー改良　Ｅ－ＭＰ７９　　　　　　１０枚",
+"　　東邦ｺｰﾄﾞ　　031507844　　ＪＡＮコード　　4987026283142　　メーカー名　　栄研化学　　　商品名　　ポア－ＤＨＬ寒天培地Ｅ－ＭＰ０３　　　　　　１０枚",
+"　　東邦ｺｰﾄﾞ　　031507947　　ＪＡＮコード　　4987026147659　　メーカー名　　栄研化学　　　商品名　　ポア－マンニット食塩　Ｅ－ＭＰ５２　　　　　１０枚",
+"　　東邦ｺｰﾄﾞ　　031420129　　ＪＡＮコード　　4987302058754　　メーカー名　　島津ダイア　　商品名　　フェイバーＧ染色液Ｂフクシン　　　　　　５００ｍＬ",
+"　　東邦ｺｰﾄﾞ　　031420132　　ＪＡＮコード　　4987302058723　　メーカー名　　島津ダイア　　商品名　　フェイバーＧ染色液Ａビクトリアブルー　　　　５００",
+"　　東邦ｺｰﾄﾞ　　031412214　　ＪＡＮコード　　4987302051786　　メーカー名　　島津ダイア　　商品名　　ＧＡＭ半流動高層培地　　　　　　　　　　　　２０本",
+"　　東邦ｺｰﾄﾞ　　031544334　　ＪＡＮコード　　4987026188584　　メーカー名　　栄研化学　　　商品名　　ＬＭＰ５２０結核菌群検出シヤク　　　　　　　４８Ｔ",
+"　　東邦ｺｰﾄﾞ　　031515135　　ＪＡＮコード　　4987026100562　　メーカー名　　栄研化学　　　商品名　　ＫＢディスクＣクリンダマイシン＊ＣＬＭ　　５１枚２",
+"　　東邦ｺｰﾄﾞ　　031540415　　ＪＡＮコード　　4987026153568　　メーカー名　　栄研化学　　　商品名　　ポア－チョコレート２－Ｓ　Ｅ－ＭＳ５０　　　１０枚",
+"　　東邦ｺｰﾄﾞ　　031543978　　ＪＡＮコード　　4987026185262　　メーカー名　　栄研化学　　　商品名　　ＬＭＰ８０２　ＰＵＲＥ　ＤＮＡ抽出　　　　　９０Ｔ",
+"　　東邦ｺｰﾄﾞ　　031541916　　ＪＡＮコード　　4987026164809　　メーカー名　　栄研化学　　　商品名　　ポア－羊血寒Ｍ７０　Ｅ－ＭＲ９６　　　　　　１０枚",
+"　　東邦ｺｰﾄﾞ　　031727209　　ＪＡＮコード　　4987502301803　　メーカー名　　積水メディ　　商品名　　日立ＩＳＥ標準液ＬＯＷ　　　　　　　　　５ｍＬＸ６",
+"　　東邦ｺｰﾄﾞ　　031727212　　ＪＡＮコード　　4987502301810　　メーカー名　　積水メディ　　商品名　　日立ＩＳＥ標準液ＨＩＧＨ　　　　　　　　５ｍＬＸ６"
+    ];
+
+    $(function () {
+      function displayList() {
+        const $targetArea = $('.target-area');
+        $targetArea.empty(); 
+
+        items.forEach(function(item) {
+          $targetArea.append('<li>' + item + '</li>');
+        });
+      }
+
+      displayList();
+
+      $('#search-text').on('input', function () {
+        var searchResult = [];
+        var searchText = $(this).val(); 
+        var targetText;
+        var hitNum;
+
+        $('#search-result__list').empty();
+        $('.search-result__hit-num').empty();
+
+        if (searchText != '') {
+          items.forEach(function(item) {
+            targetText = item;
+
+            if (targetText.indexOf(searchText) != -1) {
+              searchResult.push(targetText);
+            }
+          });
+
+          for (var i = 0; i < searchResult.length; i++) {
+            $('<span>').text(searchResult[i]).appendTo('#search-result__list');
+          }
+
+          hitNum = '<span>検索結果</span>：' + searchResult.length + '件見つかりました。';
+          $('.search-result__hit-num').append(hitNum);
+        }
+      });
+    });
+  </script>
+
+<img src="test.jpg" alt="">
+	
+    <table border="1" width="300" >
+        <tr>
+          <th>メーカー名</th>
+          <th>商品名</th>
+          <th>規格</th>
+          <th>数量</th>
+          <th>単価</th>
+          <th>金額</th>
+          <th>商品コード</th>
+        </tr>
+        <tr>
+          <td>　　　　　　</td>
+          <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+          <td>　　　　　　</td>
+          <td>　　　　　　</td>
+          <td>　　　　　　</td>
+          <td>　　　　　　</td>
+          <td>　　　　　　</td>
+        </tr>
+        <tr>
+            <td>　　　　　　</td>
+            <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+          </tr>
+          <tr>
+            <td>　　　　　　</td>
+            <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+          </tr>
+          <tr>
+            <td>　　　　　　</td>
+            <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+          </tr>
+          <tr>
+            <td>　　　　　　</td>
+            <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+          </tr>  
+           <tr>
+            <td>　　　　　　</td>
+            <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+          </tr>
+          <tr>
+            <td>　　　　　　</td>
+            <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+          </tr>
+          <tr>
+            <td>　　　　　　</td>
+            <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+          </tr>
+          <tr>
+            <td>　　　　　　</td>
+            <td>　　　　　　　　　　　　　　　　　　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+            <td>　　　　　　</td>
+          </tr>
+        </tr>
+       <tr>
+          <td colspan="5">合計</td>
+         <!-- セルを横に5つ結合する -->
+         <td>　　　　　</td>
+         <td>　　　　　</td>
+        </tr>
+      </table>
+
+      <table border="1" width="300" >
+        <tr>
+          <th>   </th>
+          <th>検索</th>
+          <th>結果</th>
+        </tr>
+        <tr>
+          <td>東邦コード</td>
+          <td>　　</td>
+          <td>　　</td>
+        </tr>
+      </table>
+      <a href="https://www.tohoyk.co.jp/">ホームページこちら</a>
+</body>
+</html>
